@@ -24,27 +24,27 @@ func (list List) Fold(acc T, f func(acc T, i T) T) T {
 }
 
 func (list List) Filter(f func(elem T) bool) T {
-	return list.FilterRec(0, f)
+	return list.filterRec(0, f)
 }
 
-func (list List) FilterRec(i int, f func(elem T) bool) T {
+func (list List) filterRec(i int, f func(elem T) bool) T {
 	if len(list) == 0 {
 		return list
 	}
 	if f(list[i]) {
-		return list.FilterRec(i+1, f)
+		return list.filterRec(i+1, f)
 	}
-	return append(list[:i], list[i:]).FilterRec(i, f)
+	return append(list[:i], list[i:]).filterRec(i, f)
 }
 
 func (list List) Map(f func(elem T) T) T {
-	return list.MapRec(0, f)
+	return list.mapRec(0, f)
 }
 
-func (list List) MapRec(i int, f func(elem T) T) T {
+func (list List) mapRec(i int, f func(elem T) T) T {
 	if len(list) == 0 {
 		return list
 	}
 	updated := append(list[:i], f(list[i]), list[i:])
-	return updated.MapRec(i+1, f)
+	return updated.mapRec(i+1, f)
 }
