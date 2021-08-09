@@ -47,10 +47,16 @@ func TestList_Map(t *testing.T) {
 		want List
 	}{
 		{
-			"Can map int to string",
+			"can map int to string",
 			List{1, 2, 3},
 			convertInts,
 			List{"01: 1", "02: 2", "03: 3"},
+		},
+		{
+			"can double entries",
+			List{1, 2, 3},
+			double,
+			List{2, 4, 6},
 		},
 	}
 	for _, test := range tests {
@@ -58,6 +64,45 @@ func TestList_Map(t *testing.T) {
 
 		})
 	}
+}
+
+func TestList_Filter(t *testing.T) {
+	tests := []struct {
+		name string
+		list List
+		arg  func(elem T) T
+		want List
+	}{
+		{
+			"can filter uneaven numbers",
+			List{1, 2, 3},
+			isUneaven,
+			List{1, 3},
+		},
+		{
+			"can filter for strings",
+			List{"John", "Sandy", "Peter", "Sarah"},
+			startsWithS,
+			List{"Sandy", "Sarah"},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+
+		})
+	}
+}
+
+func startsWithS(elem T) T {
+	return elem.(string)[0] == 'S'
+}
+
+func isUneaven(elem T) T {
+	return elem.(int)%2 == 1
+}
+
+func double(elem T) T {
+	return elem.(int) * 2
 }
 
 func convertInts(elem T) T {

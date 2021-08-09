@@ -23,6 +23,20 @@ func (list List) Fold(acc T, f func(acc T, i T) T) T {
 	return list[1:].Fold(t, f)
 }
 
+func (list List) Filter(f func(elem T) bool) T {
+	return list.FilterRec(0, f)
+}
+
+func (list List) FilterRec(i int, f func(elem T) bool) T {
+	if len(list) == 0 {
+		return list
+	}
+	if f(list[i]) {
+		return list.FilterRec(i+1, f)
+	}
+	return append(list[:i], list[i:]).FilterRec(i, f)
+}
+
 func (list List) Map(f func(elem T) T) T {
 	return list.MapRec(0, f)
 }
