@@ -97,6 +97,43 @@ func TestList_Filter(t *testing.T) {
 	}
 }
 
+func TestList_Reduce(t *testing.T) {
+	type args struct {
+		acc T
+		f   func(acc T, i T) T
+	}
+	tests := []struct {
+		name string
+		list List
+		args args
+		want T
+	}{
+		{"can find Max in List",
+			List{15, 4, 20},
+			args{0, max},
+			20},
+		{"can concatenate Strings",
+			List{"a", "b", "c"},
+			args{"", concatenate},
+			"abc"},
+		{"can multiply",
+			List{1, 5, 6},
+			args{0, multiply},
+			30},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.list.Reduce(tt.args.f); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Fold() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func multiply(i T, j T) T {
+	return i.(int) * j.(int)
+}
+
 func startsWithS(elem T) bool {
 	return elem.(string)[0] == 'S'
 }

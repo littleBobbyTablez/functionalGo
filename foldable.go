@@ -48,3 +48,16 @@ func (list List) mapRec(i int, result List, f func(elem T) T) T {
 	updated := append(result, f(list[i]))
 	return list.mapRec(i+1, updated, f)
 }
+
+func (list List) Reduce(f func(i T, j T) T) T {
+	return list[1:].reduceRec(list[0], list[1], f)
+}
+
+func (list List) reduceRec(x T, y T, f func(i T, j T) T) T {
+	if len(list) <= 1 {
+		return f(x, y)
+	}
+	t := f(x, y)
+	newList := list[1:]
+	return newList.reduceRec(t, newList[0], f)
+}
