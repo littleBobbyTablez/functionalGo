@@ -1,4 +1,4 @@
-package foldable
+package f
 
 type T interface{}
 type Int int

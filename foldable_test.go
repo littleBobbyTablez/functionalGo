@@ -1,4 +1,4 @@
-package foldable
+package f
 
 import (
 	"fmt"
