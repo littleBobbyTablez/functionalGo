@@ -59,9 +59,11 @@ func TestList_Map(t *testing.T) {
 			List{2, 4, 6},
 		},
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.list.Map(tt.arg); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Map() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -70,7 +72,7 @@ func TestList_Filter(t *testing.T) {
 	tests := []struct {
 		name string
 		list List
-		arg  func(elem T) T
+		arg  func(elem T) bool
 		want List
 	}{
 		{
@@ -86,18 +88,20 @@ func TestList_Filter(t *testing.T) {
 			List{"Sandy", "Sarah"},
 		},
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.list.Filter(tt.arg); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Map() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
 
-func startsWithS(elem T) T {
+func startsWithS(elem T) bool {
 	return elem.(string)[0] == 'S'
 }
 
-func isUneaven(elem T) T {
+func isUneaven(elem T) bool {
 	return elem.(int)%2 == 1
 }
 
@@ -107,7 +111,7 @@ func double(elem T) T {
 
 func convertInts(elem T) T {
 	i := elem.(int)
-	msg := fmt.Sprintf("%2d: %d", i, i)
+	msg := fmt.Sprintf("%02d: %d", i, i)
 	return msg
 }
 
