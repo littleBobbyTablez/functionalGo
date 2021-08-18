@@ -61,3 +61,15 @@ func (list List) reduceRec(x T, y T, f func(i T, j T) T) T {
 	newList := list[1:]
 	return newList.reduceRec(t, newList[0], f)
 }
+
+func (list List) ForEach(f func(elem T)) {
+	list.forEachRec(0, f)
+}
+
+func (list List) forEachRec(i int, f func(elem T)) {
+	if len(list) == i {
+		return
+	}
+	f(list[i])
+	list.forEachRec(i+1, f)
+}

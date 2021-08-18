@@ -3,6 +3,7 @@ package f
 import (
 	"fmt"
 	"reflect"
+	"sync"
 	"testing"
 )
 
@@ -91,7 +92,7 @@ func TestList_Filter(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.list.Filter(tt.arg); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Map() = %v, want %v", got, tt.want)
+				t.Errorf("Filter() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -124,10 +125,36 @@ func TestList_Reduce(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.list.Reduce(tt.args.f); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Fold() = %v, want %v", got, tt.want)
+				t.Errorf("Reduce() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func TestList_ForEach(t *testing.T) {
+	ch := make(chan int, 3)
+	list := List{1, 2, 3}
+	want := 6
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	var got int
+	go forEachAsync(list, ch, &wg)
+	wg.Wait()
+	close(ch)
+
+	for i := range ch {
+		got += i
+	}
+
+	if got != want {
+		t.Errorf("ForEach() = %v, want %v", got, want)
+	}
+
+}
+
+func forEachAsync(list List, ch chan int, wg *sync.WaitGroup) {
+	list.ForEach(func(i T) { ch <- i.(int) })
+	wg.Done()
 }
 
 func multiply(i T, j T) T {
