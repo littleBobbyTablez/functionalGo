@@ -152,6 +152,38 @@ func TestList_ForEach(t *testing.T) {
 
 }
 
+func TestList_Head(t *testing.T) {
+	list := List{1, 2, 3}
+	want := 1
+	if got := list.Head(); got != want {
+		t.Errorf("ForEach() = %v, want %v", got, want)
+	}
+}
+
+func TestList_Last(t *testing.T) {
+	list := List{1, 2, 3}
+	want := 3
+	if got := list.Last(); got != want {
+		t.Errorf("ForEach() = %v, want %v", got, want)
+	}
+}
+
+func TestList_Tail(t *testing.T) {
+	list := List{1, 2, 3}
+	want := List{2, 3}
+	if got := list.Tail(); !reflect.DeepEqual(got, want) {
+		t.Errorf("ForEach() = %v, want %v", got, want)
+	}
+}
+
+func TestList_Init(t *testing.T) {
+	list := List{1, 2, 3}
+	want := List{1, 2}
+	if got := list.Init(); !reflect.DeepEqual(got, want) {
+		t.Errorf("ForEach() = %v, want %v", got, want)
+	}
+}
+
 func forEachAsync(list List, ch chan int, wg *sync.WaitGroup) {
 	list.ForEach(func(i T) { ch <- i.(int) })
 	wg.Done()

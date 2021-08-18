@@ -73,3 +73,22 @@ func (list List) forEachRec(i int, f func(elem T)) {
 	f(list[i])
 	list.forEachRec(i+1, f)
 }
+
+func (list List) Head() T {
+	return list[0]
+}
+
+func (list List) Tail() T {
+	return list[1:]
+}
+
+func (list List) Last() T {
+	return list[len(list)-1]
+}
+
+func (list List) Init() T {
+	if len(list) == 0 {
+		return List{}
+	}
+	return list[:len(list)-1]
+}
